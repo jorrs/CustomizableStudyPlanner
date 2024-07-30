@@ -1,1 +1,1 @@
-# CustomizableStudyPlanner
+CustomizableStudyPlanner is a tailored study planning application designed to help users manage their study schedule and tasks efficiently. The application features a Python-based backend that initializes the server and performs necessary setup and configuration, providing a seamless study planning experience. Ideal for students and professionals looking to optimize their study habits and track their progress.
