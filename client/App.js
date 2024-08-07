@@ -1,21 +1,21 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import StudyPlanList from './StudyPlanList';
-import StudyPlanDetail from './StudyPlanDetail';
-import AddStudyPlan from './AddStudyPlan';
-import GoalTracker from './GoalTracker';
+import StudyPlanListView from './StudyPlanList';
+import StudyPlanDetailView from './StudyPlanDetail';
+import AddStudyPlanForm from './AddStudyPlan';
+import GoalTrackerView from './GoalTracker';
 
-class App extends React.Component {
+class StudyPlannerApp extends React.Component {
   render() {
     return (
       <Router>
         <div>
           <Switch>
-            <Route exact path="/" component={StudyPlanList} />
-            <Route path="/study-plan/:id" component={StudyPlanDetail} />
-            <Route path="/add-study-plan" component={AddStudyPlan} />
-            <Route path="/goal-tracker" component={GoalTracker} />
-            <Route path="*" component={() => <h2>404 Not Found</h2>} />
+            <Route exact path="/" component={StudyPlanListView} />
+            <Route path="/study-plan/:id" component={StudyPlanDetailView} />
+            <Route path="/add-study-plan" component={AddStudyPlanForm} />
+            <Route path="/goal-tracker" component={GoalTrackerView} />
+            <Route path="*" component={() => <h2>404 Page Not Found</h2>} />
           </Switch>
         </div>
       </Router>
@@ -23,4 +23,4 @@ class App extends React.Component {
   }
 }
 
-export default App;
+export default StudyPlannerApp;
