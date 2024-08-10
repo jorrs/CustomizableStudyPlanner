@@ -1,9 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import StudyPlanListView from './StudyPlanList';
-import StudyPlanDetailView from './StudyPlanDetail';
-import AddStudyPlanForm from './AddStudyPlan';
-import GoalTrackerView from './GoalTracker';
+import StudyPlanListPage from './StudyPlanList';
+import StudyPlanDetailPage from './StudyPlanDetail';
+import AddStudyPlanPage from './AddStudyPlan';
+import GoalTrackerPage from './GoalTracker';
 
 class StudyPlannerApp extends React.Component {
   render() {
@@ -11,10 +11,10 @@ class StudyPlannerApp extends React.Component {
       <Router>
         <div>
           <Switch>
-            <Route exact path="/" component={StudyPlanListView} />
-            <Route path="/study-plan/:id" component={StudyPlanDetailView} />
-            <Route path="/add-study-plan" component={AddStudyPlanForm} />
-            <Route path="/goal-tracker" component={GoalTrackerView} />
+            <Route exact path="/" component={StudyPlanListPage} />
+            <Route path="/study-plan/:id" component={StudyPlanDetailPage} />
+            <Route path="/add-study-plan" component={AddStudyPlanPage} />
+            <Route path="/goal-tracker" component={GoalTrackerPage} />
             <Route path="*" component={() => <h2>404 Page Not Found</h2>} />
           </Switch>
         </div>
