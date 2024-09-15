@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 function AddStudyPlan() {
-  const [studyPlan, setStudyPlan] = useState({
+  const initialState = {
     title: '',
     description: '',
     startDate: '',
     endDate: ''
-  });
+  };
+
+  const [studyPlan, setStudyPlan] = useState(initialState);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -15,18 +17,14 @@ function AddStudyPlan() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); 
 
     try {
       const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/studyplans`, studyPlan);
+      
       if (response.status === 201) {
         alert('Study Plan added successfully!');
-        setStudyPlan({
-          title: '',
-          description: '',
-          startDate: '',
-          endDate: ''
-        });
+        setStudyPlan(initialState);
       }
     } catch (error) {
       console.error('Failed to add study plan:', error);
