@@ -9,12 +9,18 @@ function StudyGoals() {
     console.log('Tracking ID:', process.env.REACT_APP_TRACKING_ID);
   }, []);
 
+  const handleGoalTextChange = (e) => setGoalText(e.target.value);
+
+  const resetInputs = () => {
+    setEditIndex(-1);
+    setGoalText('');
+  };
+
   const handleAddGoal = () => {
     if (!goalText.trim()) return;
 
-    const newGoals = [...studyGoals, goalText];
-    setStudyGoals(newGoals);
-    setGoalText('');
+    setStudyGoals([...studyGoals, goalText]);
+    resetInputs();
   };
 
   const handleEditGoal = (index) => {
@@ -23,11 +29,12 @@ function StudyGoals() {
   };
 
   const handleSubmitEdit = () => {
+    if (editIndex < 0 || editIndex >= studyGoals.length) return;
+
     const updatedGoals = [...studyGoals];
     updatedGoals[editIndex] = goalText;
     setStudyGoals(updatedGoals);
-    setEditIndex(-1);
-    setGoalText('');
+    resetInputs();
   };
 
   const handleDeleteGoal = (indexToRemove) => {
@@ -40,14 +47,12 @@ function StudyGoals() {
       <input
         type="text"
         value={goalText}
-        onChange={(e) => setGoalText(e.target.value)}
+        onChange={handleGoalTextChange}
         placeholder="Type your study goal here..."
       />
-      {editIndex === -1 ? (
-        <button onClick={handleAddGoal}>Add Goal</button>
-      ) : (
-        <button onClick={handleSubmitEdit}>Save Edit</button>
-      )}
+      <button onClick={editIndex === -1 ? handleAddGoal : handleSubmitEdit}>
+        {editIndex === -1 ? 'Add Goal' : 'Save Edit'}
+      </button>
       <ul>
         {studyGoals.map((goal, index) => (
           <li key={index}>
