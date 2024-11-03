@@ -4,46 +4,92 @@ function StudyGoals() {
   const [studyGoals, setStudyGoals] = useState([]);
   const [editIndex, setEditIndex] = useState(-1);
   const [goalText, setGoalText] = useState('');
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    console.log('Tracking ID:', process.env.REACT_APP_TRACKING_ID);
+    try {
+      console.log('Tracking ID:', process.env.REACT_APP_TRACKING_ID);
+    } catch (error) {
+      setError('Failed to load tracking ID.');
+    }
   }, []);
 
-  const handleGoalTextChange = (e) => setGoalText(e.target.value);
+  const handleGoalTextChange = (e) => {
+    setGoalText(e.target.value);
+    if (error) setError('');
+  };
 
   const resetInputs = () => {
     setEditIndex(-1);
     setGoalText('');
+    if (error) setError('');
   };
 
   const handleAddGoal = () => {
-    if (!goalText.trim()) return;
+    if (!goalText.trim()) {
+      setError('Goal cannot be empty.');
+      return;
+    }
 
-    setStudyGoals([...studyGoals, goalText]);
-    resetInputs();
+    try {
+      setStudyGoals([...studyGoals, goalText]);
+      resetInputs();
+    } catch (e) {
+      setError('Failed to add goal. Please try again.');
+    }
   };
 
   const handleEditGoal = (index) => {
-    setEditIndex(index);
-    setGoalText(studyGoals[index]);
+    if (index < 0 || index >= studyGoals.length) {
+      setError('Invalid goal selected for edit.');
+      return;
+    }
+
+    try {
+      setEditIndex(index);
+      setGoalText(studyGoals[index]);
+    } catch (e) {
+      setError('Failed to select goal for editing.');
+    }
   };
 
   const handleSubmitEdit = () => {
-    if (editIndex < 0 || editIndex >= studyGoals.length) return;
+    if (editIndex < 0 || editIndex >= studyGoals.length) {
+      setError('Invalid index for editing.');
+      return;
+    }
+    if (!goalText.trim()) {
+      setError('Goal text cannot be empty.');
+      return;
+    }
 
-    const updatedGoals = [...studyGoals];
-    updatedGoals[editIndex] = goalText;
-    setStudyGoals(updatedGoals);
-    resetInputs();
+    try {
+      const updatedGoals = [...studyGoals];
+      updatedGoals[editIndex] = goalText;
+      setStudyGoals(updatedGoals);
+      resetInputs();
+    } catch (e) {
+      setError('Failed to update goal. Please try again.');
+    }
   };
 
   const handleDeleteGoal = (indexToRemove) => {
-    setStudyGoals(studyGoals.filter((_, index) => index !== indexToRemove));
+    if (indexToRemove < 0 || indexToRemove >= studyGoals.length) {
+      setError('Invalid index for deletion.');
+      return;
+    }
+
+    try {
+      setStudyGoals(studyGoals.filter((_, index) => index !== indexToRemove));
+    } catch (e) {
+      setError('Failed to delete goal. Please try again.');
+    }
   };
 
   return (
     <div>
       <h2>Study Goals</h2>
+      {error && <p className="error" style={{ color: 'red' }}>{error}</p>}
       <input
         type="text"
         value={goalText}
