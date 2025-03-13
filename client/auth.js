@@ -1,40 +1,41 @@
 const crypto = require('crypto');
 const env = {
-    SECRET_KEY: 'your-secret-key',
+    SECRET_KEY: 'your-secret-key', // Ensure this is kept secure and unique for production
 };
-const UsersDB = new Map();
 
-function hashPassword(password) {
+const UsersDatabase = new Map();
+
+function hashUserPassword(password) {
     return crypto.createHmac('sha256', env.SECRET_KEY).update(password).digest('hex');
 }
 
-function generateToken() {
+function generateUserToken() {
     return crypto.randomBytes(64).toString('hex');
 }
 
-function register(username, password) {
+function registerUser(username, password) {
     if (!username || !password) {
         console.log('Username and password are required');
         return;
     }
-    if (UsersDB.has(username)) {
+    if (UsersDatabase.has(username)) {
         console.log('User already exists');
         return;
     }
-    const hashedPassword = hashPassword(password);
-    UsersDB.set(username, { password: hashedPassword, token: null });
+    const hashedPassword = hashUserPassword(password);
+    UsersDatabase.set(username, { password: hashedPassword, token: null });
     console.log('User registered successfully');
 }
 
-function login(username, password) {
-    if (!UsersDB.has(username)) {
+function loginUser(username, password) {
+    if (!UsersDatabase.has(username)) {
         console.log('User does not exist');
         return;
     }
-    const user = UsersDB.get(username);
-    const hashedPassword = hashPassword(password);
+    const user = UsersDatabase.get(username);
+    const hashedPassword = hashUserPassword(password);
     if (user.password === hashedPassword) {
-        const token = generateToken();
+        const token = generateUserToken();
         user.token = token;
         console.log('Login successful', { username, token });
         return { username, token };
@@ -44,12 +45,12 @@ function login(username, password) {
     }
 }
 
-function isAuthenticated(username, token) {
-    if (!UsersDB.has(username)) {
+function verifyUserAuthentication(username, token) {
+    if (!UsersDatabase.has(username)) {
         console.log('User does not exist');
         return false;
     }
-    const user = UsersDB.get(username);
+    const user = UsersDatabase.get(username);
     if (user.token === token) {
         console.log('User is authenticated');
         return true;
@@ -59,4 +60,10 @@ function isAuthenticated(username, token) {
     }
 }
 
-module.exports = { hashPassword, generateToken, register, login, isAuthenticated };
+module.exports = { 
+    hashPassword: hashUserPassword, 
+    generateToken: generateUserToken, 
+    register: registerUser, 
+    login: loginUser, 
+    isAuthenticated: verifyUserAuthentication 
+};
